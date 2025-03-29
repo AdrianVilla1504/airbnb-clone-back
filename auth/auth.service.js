@@ -1,6 +1,6 @@
 /* eslint-disable no-underscore-dangle */
 const jsonToken = require('jsonwebtoken');
-const { findUserByEmail } = require('../api/users/users.services');
+const { findUserByEmail } = require('../server/users/users.services');
 
 function signToken(payload) {
   const token = jsonToken.sign(

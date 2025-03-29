@@ -4,7 +4,7 @@ const {
   findOneUser,
   getSingleUser,
   updateUser,
-} = require('../../api/users/users.services');
+} = require('../../server/users/users.services');
 const { signToken } = require('../auth.service');
 
 async function loginUserHandler(req, res) {
