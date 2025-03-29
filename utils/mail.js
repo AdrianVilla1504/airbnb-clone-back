@@ -22,10 +22,15 @@ async function sendNodemailer(data) {
   return info;
 }
 
-function sendMailSendGrid(data) {
-  sendgrid.setApiKey(process.env.SENDGRID_API_KEY);
-
-  return sendgrid.send(data);
+async function sendMailSendGrid(data) {
+  console.log('data sendgrid => ', data);
+  const apiKeyConnection = sendgrid.setApiKey(process.env.SENDGRID_API_KEY);
+  console.log('apiKeyConnection => ', apiKeyConnection);
+  console.log('before sendgrid send ');
+  const sentMessage = await sendgrid.send(data);
+  console.log('after sendgrid send');
+  console.log('sentMessage => ', sentMessage);
+  return sentMessage;
 }
 
 module.exports = {

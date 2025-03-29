@@ -7,7 +7,7 @@ const {
   findOneUser,
   findUserByEmail,
 } = require('./users.services');
-const { sendNodemailer } = require('../../utils/mail');
+const { sendMailSendGrid } = require('../../utils/mail');
 
 async function getAllUsersHandler(_, res) {
   try {
@@ -36,7 +36,7 @@ async function getSingleUserHandler(req, res) {
 
 async function createUserHandler(req, res) {
   const userData = req.body;
-
+  console.log('userData', userData);
   try {
     const hash = crypto.createHash('sha256')
       .update(userData.email)
@@ -44,9 +44,10 @@ async function createUserHandler(req, res) {
 
     userData.passwordResetToken = hash;
     userData.passwordResetExpires = Date.now() + 3_600_000 * 24;
+    console.log('hash', hash);
     const user = await createUser(userData);
     const message = {
-      from: '"no-replay" <airbclone@gmail.com>',
+      from: '"no-reply" <adriancvilla@gmail.com>',
       to: user.email,
       subject: 'Activate your account',
       html: `
@@ -54,8 +55,9 @@ async function createUserHandler(req, res) {
       <a href="http://localhost:3000/verifyAccount/${hash}" target="_blank" rel="no referer"> <h3>Click me!</h3> </a>
       `,
     };
-
-    await sendNodemailer(message);
+    console.log('message', message);
+    const nodemailer = await sendMailSendGrid(message);
+    console.log('nodemailer', nodemailer);
     return res.status(201).json(user);
   } catch (error) {
     return res.status(500).json({ error: error.message });
